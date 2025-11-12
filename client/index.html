@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Paddy to Prompt: LLM Engineering Lifecycle</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- <style>
+        /* Custom Styles for Scrolling Sections and Dark Theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* Slate 900 */
+            color: #E2E8F0; /* Slate 200 */
+            scroll-behavior: smooth;
+        }
+
+        /* Full viewport height for sections */
+        .full-screen-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .scroll-arrow {
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Custom Icon/Text Alignment for Key Activities */
+        .detail-list li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6; /* Improved readability for dense text */
+        }
+        .detail-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.65rem;
+            height: 0.5rem;
+            width: 0.5rem;
+            background-color: #A3E635; /* Lime 400 */
+            border-radius: 50%;
+        }
+
+        /* Image Container for animation placeholder */
+        .image-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Placeholder styling */
+            background-color: #1E293B; 
+            color: #A3E635;
+        }
+
+        /* Specific styling for the intro background */
+        .intro-bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: none;
+            z-index: 5; /* Below the overlay and content */
+        }
+
+        /* Styling for the dark overlay */
+        .intro-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.85); /* Slightly darker overlay for text readability */
+            z-index: 10;
+        }
+        
+        /* Styling for the main content block */
+        .intro-content {
+            position: relative;
+            z-index: 20;
+        }
+
+    </style> -->
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <!-- === HEADER / INTRO SLIDE === -->
+     <section id="intro" class="full-screen-section">
+        
+        <!-- Background Image Element (Replace the src with your desired image path) -->
+        <img src="/client/images//From_Paddy_to_Prompt.png" 
+             alt="Conceptual image of rice fields meeting a digital prompt." 
+             class="intro-bg-img" />
+
+        <div class="intro-overlay"></div>
+        <div class="intro-content text-center max-w-4xl">
+            <h1 class="text-7xl md:text-8xl font-extrabold tracking-tight mb-6">
+                From Paddy to <span class="text-lime-400">Prompt</span>
+            </h1>
+            <p class="text-2xl text-slate-300 mb-12">
+                Remapping the AI Lifecycle for the Modern Era of Generative Models
+            </p>
+            <button onclick="document.getElementById('details-section').scrollIntoView();" 
+                    class="bg-lime-500 hover:bg-lime-600 text-slate-900 font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                View Lifecycle Details
+            </button>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-arrow">
+                <i data-lucide="chevrons-down" class="w-8 h-8 text-slate-400"></i>
+            </div>
+        </div>
+    </section>
+    <!-- <section id="intro" class="full-screen-section bg-slate-900">
+        <div class="text-center max-w-4xl">
+            <h1 class="text-7xl md:text-8xl font-extrabold tracking-tight mb-6">
+                From Paddy to <span class="text-lime-400">Prompt</span>
+            </h1>
+            <p class="text-2xl text-slate-400 mb-12">
+                Remapping the AI Lifecycle for the Modern Era of Generative Models
+            </p>
+            <button onclick="document.getElementById('details-section').scrollIntoView();" 
+                    class="bg-lime-500 hover:bg-lime-600 text-slate-900 font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                View Lifecycle Details
+            </button>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-arrow">
+                <i data-lucide="chevrons-down" class="w-8 h-8 text-slate-500"></i>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- === MAIN DETAILS SECTION === -->
+    <div id="details-section" class="pt-10">
+        
+        <!-- Stage 1: Data Sourcing -->
+        <section id="stage-1" class="full-screen-section bg-gray-900/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 1</p>
+                        <h2 class="text-4xl font-bold mb-6">The Global Harvest: <span class="text-lime-400">Data Sourcing</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>Harvesting every grain from thousands of fields across the globe. This is an industrial-scale, indiscriminate collection of <strong>all textual data</strong>—the foundational, raw material.</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>Data ingestion and cleaning. This involves acquiring petabytes of raw, unstructured text (from Common Crawl, Wikipedia, books, and code repositories) and preparing it for the massive pre-training phase.</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-1', 'arrow-1')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-1" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-1" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>Aggressive Deduplication & Near-Deduplication:</strong> Utilizing min-hashing and LSH (Locality Sensitive Hashing) techniques to remove near-identical text spans (e.g., duplicated code or documentation) to prevent model overfitting and memorization.</li>
+                                        <li><strong>PII Masking and Privacy Filtering:</strong> Employing specialized NLP models to detect, mask, or entirely filter out sensitive personally identifiable information (PII) before the data enters the training pipeline.</li>
+                                        <li><strong>Quality & Toxicity Filtering:</strong> Implementing sophisticated statistical classifiers to score text by perplexity, helpfulness, and toxicity, ensuring the input data is safe and maintains a high signal-to-noise ratio.</li>
+                                        <li><strong>Multilingual and Domain Balancing:</strong> Strategically sampling and weighting data to ensure fair representation across languages, dialects, and high-value domains (e.g., code, scientific papers) to avoid model skill degradation.</li>
+                                        <li><strong>Tokenization Strategy Finalization:</strong> Defining and training the optimal tokenizer (e.g., Byte-Pair Encoding) to manage vocabulary size efficiently, which is a fundamental step dictating how the model processes language.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S1" alt="Animated Analogy for Global Data Harvesting" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S1'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: Gigantic data streams flowing into a storage silo.]</div>'"> -->
+                            <img src="/client/images/data_harvest.png" alt="Animated GIF showing data streams"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 2: Pre-training -->
+        <section id="stage-2" class="full-screen-section bg-gray-800/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S2" alt="Animated Analogy for Industrial Mill Pre-training" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S2'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: An enormous industrial machine processing raw material into uniform blocks.]</div>'"> -->
+                            <img src="/client/images/Industrial_Mill.png" alt="">
+                        </div>
+                    </div>
+
+                    <!-- Right Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 2</p>
+                        <h2 class="text-4xl font-bold mb-6">The Industrial Mill: <span class="text-lime-400">Pre-training</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>The massive harvest is processed in a huge factory, creating the <strong>"base grain."</strong> This is the initial, powerful commodity—a vast silo of knowledge, but not yet a specialized meal.</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>The compute-intensive process that trains the **Foundation Model**. The model learns the **statistical structure of language** and acquires vast **world knowledge** through unsupervised learning.</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-2', 'arrow-2')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-2" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-2" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>Architecture Scaling (MoE):</strong> Implementing advanced architectures like **Mixture-of-Experts (MoE)** layers to drastically increase model capacity (parameters) while only activating a sparse subset during inference, optimizing speed and efficiency.</li>
+                                        <li><strong>Large-Scale Distributed Training:</strong> Utilizing thousands of interconnected accelerators (TPUs/GPUs) and complex parallelism strategies (Tensor and Pipeline) to distribute the massive model state and computation across hardware clusters.</li>
+                                        <li><strong>Hardware-Aware Optimization:</strong> Customizing memory and communication patterns (like All-Reduce operations) to minimize inter-device latency, which is the key bottleneck in extreme-scale training runs.</li>
+                                        <li><strong>Context Window Expansion:</strong> Integrating techniques such as **Rotary Positional Embeddings (RoPE)** or ALiBi to enable the model to handle significantly longer input and context sequences without suffering performance degradation.</li>
+                                        <li><strong>Optimized Checkpointing:</strong> Implementing resilient and frequent state saving to ensure that the multi-million-dollar training run can be restarted efficiently after any hardware or software failure.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 3: Alignment (RLHF) -->
+        <section id="stage-3" class="full-screen-section bg-gray-900/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 3</p>
+                        <h2 class="text-4xl font-bold mb-6">The Artisanal Touch: <span class="text-lime-400">Alignment (RLHF)</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>A master chef meticulously seasons the raw rice to create perfect, high-grade sushi rice. This seasoning teaches the rice *how to be used*—it's about **quality and preference**, not raw quantity.</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>Refining the pre-trained model using a small, **high-quality dataset of human feedback** to ensure the model is **Helpful, Harmless, and Honest** (HHH framework).</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-3', 'arrow-3')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-3" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-3" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>Direct Preference Optimization (DPO):</strong> Implementing modern, single-stage alignment techniques like DPO that directly optimize the LLM policy based on human preferences, bypassing the complex, unstable Reward Model required by traditional RLHF.</li>
+                                        <li><strong>Supervised Fine-Tuning (SFT):</strong> The critical initial phase where the base model is fine-tuned on curated **instruction-response pairs** to immediately learn the *format* of following a command and generating conversational output.</li>
+                                        <li><strong>Red Teaming & Adversarial Testing:</strong> Continuous, systematic probing by specialized safety teams to discover and patch prompt injection vulnerabilities, jailbreaks, and avenues for generating harmful content.</li>
+                                        <li><strong>Model Safety Guards & Filters:</strong> Integrating layered safety mechanisms, including simple keyword filters and smaller, specialized classifier models, to block toxic or policy-violating prompts and outputs.</li>
+                                        <li><strong>Bias Mitigation via Feedback:</strong> Actively measuring and mitigating social and political biases by integrating explicit human preference data that favors balanced, fair, and non-discriminatory responses during alignment.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S3" alt="Animated Analogy for Artisanal Chef Fine-Tuning" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S3'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: A chef carefully tasting and adjusting seasonings on a dish.]</div>'"> -->
+                            <img src="/client/images/fine-tuning.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 4: Deployment -->
+        <section id="stage-4" class="full-screen-section bg-gray-800/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S4" alt="Animated Analogy for Professional Kitchen Deployment" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S4'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: A bustling kitchen with chefs efficiently handing out plates.]</div>'"> -->
+                            <img src="/client/images/Deployment.png" alt="">
+                        </div>
+                    </div>
+
+                    <!-- Right Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 4</p>
+                        <h2 class="text-4xl font-bold mb-6">The Professional Kitchen: <span class="text-lime-400">Deployment</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>The finished, seasoned rice is stocked in a high-end kitchen. It's ready to handle custom orders immediately. This is the transition from **training** (R&D) to **serving** (production).</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>Optimization and hosting of the aligned model to efficiently handle millions of concurrent user requests (inference) at low latency and high throughput.</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-4', 'arrow-4')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-4" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-4" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>Inference Optimization (vLLM/DeepSpeed):</strong> Leveraging frameworks that implement state-of-the-art techniques like **Paged Attention** and **Continuous Batching** to significantly increase the tokens-per-second throughput of the serving infrastructure.</li>
+                                        <li><strong>Weight Quantization & Sparsity:</strong> Applying methods like **AWQ** or **GPTQ** to reduce the precision of the model weights (down to 4-bit or 8-bit) for massive memory savings and faster inference with minimal performance loss.</li>
+                                        <li><strong>Speculative Decoding:</strong> Using a smaller, faster draft model to predict token sequences, which the main model quickly verifies in parallel, leading to significant acceleration in generation speed.</li>
+                                        <li><strong>KV Cache Management:</strong> Efficiently managing the **Key-Value (KV) cache** (the intermediate attention states) in GPU memory to reduce redundant computation and handle long sequences without exceeding memory limits.</li>
+                                        <li><strong>Latency Tuning (TTFT):</strong> Relentlessly optimizing the **Time-to-First-Token (TTFT)** through techniques like aggressive initial pre-filling to ensure the user gets an immediate, responsive feeling from the API.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 5: RAG -->
+        <section id="stage-5" class="full-screen-section bg-gray-900/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 5</p>
+                        <h2 class="text-4xl font-bold mb-6">The Household Pantry: <span class="text-lime-400">RAG</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>A household combines the professional rice (LLM) with **their own fresh, private ingredients** (vegetables, spices) from their pantry. The rice's role is to cook the *user's* chosen recipe.</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>Retrieval-Augmented Generation. A pattern used to **ground** the LLM's response in external, often private or up-to-date, knowledge to prevent **hallucinations** and stale information.</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-5', 'arrow-5')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-5" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-5" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>Intelligent Chunking & Indexing:</strong> Moving beyond fixed-size chunks to **semantic** or **hierarchical chunking** strategies that preserve context and ensure entire relevant passages are stored together.</li>
+                                        <li><strong>Advanced Retrieval Techniques:</strong> Implementing **Fusion Retrieval (Hybrid Search)** to combine the strengths of keyword search (BM25) with dense vector search for maximized recall and relevance.</li>
+                                        <li><strong>Context Re-ranking (Post-Retrieval):</strong> Using a smaller, specialized Re-Ranker model to score the top 10-20 retrieved chunks and selecting only the top 3-5 to insert into the final prompt, drastically improving precision.</li>
+                                        <li><strong>Embedding Model Selection:</strong> Carefully selecting or **fine-tuning the Embedding Model** (e.g., creating a multi-vector index) to ensure the vector representation accurately captures the semantics of the specific domain data being indexed.</li>
+                                        <li><strong>Query Rewriting & Optimization:</strong> Utilizing the LLM itself to rephrase or generate multiple variations of the user's initial query before the vector search, ensuring better alignment with the indexed document semantics.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S5" alt="Animated Analogy for Household Pantry RAG" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S5'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: A smart robot hand reaching into a cabinet to pull out a specific ingredient.]</div>'"> -->
+                            <img src="/client/images/Household_Pantry_RAG.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stage 6: Agentic AI -->
+        <section id="stage-6" class="full-screen-section bg-gray-800/90 backdrop-blur-sm">
+            <div class="container mx-auto max-w-6xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Left Column: Animated Image Analogy -->
+                    <div class="hidden lg:block">
+                        <div class="image-container bg-slate-800 h-full w-full shadow-2xl">
+                            <!-- <img src="https://placehold.co/500x500/1E293B/A3E635?text=ANIMATION+PLACEHOLDER+S6" alt="Analogy for Robotic Chef Agentic AI" 
+                                class="object-cover rounded-lg"
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x500/1E293B/A3E635?text=ANIMATED+PLACEHOLDER+S6'; this.style.display='block'; this.parentNode.innerHTML='<div class=\'p-8 text-center text-lime-400 font-bold text-xl\'>[Animated visual: A robot chef performing a complex, multi-step cooking process.]</div>'"> -->
+                            <!-- <img src="/pady_to_promt_img/Robotic_Chef_showcasing_Agentic_AI.png" alt=""> -->
+                            <img src="/client/images/Robotic_Chef_showcasing_Agentic_AI.png" alt="">
+                        </div>
+                    </div>
+
+                    <!-- Right Column: LLM Details -->
+                    <div>
+                        <p class="text-base font-semibold text-lime-400 uppercase tracking-wider mb-2">Stage 6</p>
+                        <h2 class="text-4xl font-bold mb-6">The Robotic Chef: <span class="text-lime-400">Agentic AI</span></h2>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">Rice Analogy:</h3>
+                                <p>The "chef" can not only cook, but can **use appliances**—the blender, the oven, or a shopping list API. It can perform complex, multi-step tasks by interacting with the real world.</p>
+                            </div>
+                            <div class="p-5 bg-slate-800 rounded-xl border border-slate-700">
+                                <h3 class="text-xl font-semibold text-slate-100 mb-2">LLM Equivalent:</h3>
+                                <p>The model is instructed to act as an **autonomous agent** capable of planning, reflection, and executing actions using a predefined set of external **tools (function calling)**.</p>
+                            </div>
+
+                            <!-- Clickable Key Activities -->
+                            <div class="bg-slate-700 p-5 rounded-xl transition-all duration-300">
+                                <button class="flex justify-between items-center w-full focus:outline-none text-slate-50 font-bold" onclick="toggleDetails('details-6', 'arrow-6')">
+                                    Key Activities (Steps)
+                                    <i id="arrow-6" data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300"></i>
+                                </button>
+                                <div id="details-6" class="key-details hidden mt-4 overflow-hidden transition-all duration-500 text-slate-200">
+                                    <ul class="detail-list list-none pl-0">
+                                        <li><strong>ReAct Pattern Implementation:</strong> Utilizing the **Reasoning (Thought) → Action (Tool Call) → Observation (Tool Result)** loop to guide the LLM through complex, multi-step tasks that require external information or computation.</li>
+                                        <li><strong>Tool Orchestration & Schema Definition:</strong> Precisely defining the input and output JSON schemas for all available external APIs (tools) so the LLM can reliably execute **Function Calling** to interact with the external world (e.g., booking flights, running code).</li>
+                                        <li><strong>Self-Correction and Reflection:</strong> Integrating a meta-cognitive step where the agent reviews the outcome of its previous actions and determines if a step failed or if the final output meets the goal, initiating re-planning if necessary.</li>
+                                        <li><strong>Hierarchical Planning:</strong> Breaking down extremely complex user goals into high-level milestones, then delegating the low-level execution (tool-calls) to the agent, improving long-term coherence.</li>
+                                        <li><strong>Long-Term Memory Integration:</strong> Storing key user preferences, past successes, and learned knowledge in a persistent memory (often a vector database) which the agent retrieves and uses to inform its current plan.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary" class="full-screen-section bg-slate-900">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-5xl font-bold mb-12">The <span class="text-lime-400">Full Modern Stack</span> Simplified</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <div class="p-8 bg-slate-800 rounded-xl shadow-xl border border-slate-700 transition duration-300 hover:scale-[1.02]">
+                        <i data-lucide="brain" class="w-12 h-12 text-lime-400 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-2 text-slate-50">Foundation Model</h3>
+                        <p class="text-slate-400">The massive, pre-trained, and aligned core intelligence.</p>
+                        <p class="text-sm font-bold text-lime-500 mt-4">Stages 1-4</p>
+                    </div>
+
+                    <div class="p-8 bg-slate-800 rounded-xl shadow-xl border border-slate-700 transition duration-300 hover:scale-[1.02]">
+                        <i data-lucide="database" class="w-12 h-12 text-lime-400 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-2 text-slate-50">RAG System</h3>
+                        <p class="text-slate-400">Gives the brain access to private, up-to-date, grounded knowledge.</p>
+                        <p class="text-sm font-bold text-lime-500 mt-4">Stage 5</p>
+                    </div>
+
+                    <div class="p-8 bg-slate-800 rounded-xl shadow-xl border border-slate-700 transition duration-300 hover:scale-[1.02]">
+                        <i data-lucide="compass" class="w-12 h-12 text-lime-400 mx-auto mb-4"></i>
+                        <h3 class="text-2xl font-semibold mb-2 text-slate-50">Agentic AI</h3>
+                        <p class="text-slate-400">Gives the brain "hands" to execute multi-step actions using external tools.</p>
+                        <p class="text-sm font-bold text-lime-500 mt-4">Stage 6</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('intro').scrollIntoView();" 
+                    class="mt-12 text-slate-900 bg-slate-300 hover:bg-slate-400 font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+                    Back to Top
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+    <!-- <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Function to toggle the key activities details
+        function toggleDetails(contentId, arrowId) {
+            const content = document.getElementById(contentId);
+            const arrow = document.getElementById(arrowId);
+            
+            // Check if content is currently visible
+            const isHidden = content.classList.contains('hidden');
+
+            if (isHidden) {
+                // Show content
+                content.classList.remove('hidden');
+                // Set max-height for smooth transition
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.classList.add('rotate-180');
+            } else {
+                // Hide content
+                content.style.maxHeight = '0';
+                arrow.classList.remove('rotate-180');
+                
+                // Add hidden class after transition completes
+                content.addEventListener('transitionend', function handler() {
+                    content.classList.add('hidden');
+                    content.removeEventListener('transitionend', handler);
+                }, { once: true });
+            }
+
+            // Ensure the initial height is set correctly for subsequent toggles
+            if (isHidden) {
+                // We need to re-read the height after making it visible for the transition to work
+                requestAnimationFrame(() => {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                });
+            } else {
+                 content.style.maxHeight = '0px';
+            }
+        }
+
+        // Apply max-height transition property globally to all key-details
+        document.querySelectorAll('.key-details').forEach(el => {
+            el.style.transition = 'max-height 0.4s ease-in-out';
+            el.style.maxHeight = '0'; // Initialize hidden state height
+        });
+    </script> -->
+</body>
+</html>
